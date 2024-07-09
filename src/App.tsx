@@ -1,24 +1,28 @@
-import React from 'react';
-import logo from './logo.svg';
+
+import { useEffect } from 'react';
 import './App.css';
+import Header from './components/Header/Header';
+import { useAppDispatch, useAppSelector } from './store/hooks';
+import { fetchFilms } from './store/slices/filmsSlice';
+import { Route, Routes } from 'react-router-dom';
+import HomePage from './pages/HomePage';
+import { useSelector } from 'react-redux';
+import UniquePage from './pages/UniquePage/UniquePage';
 
 function App() {
+  const disptach = useAppDispatch()
+  const {page} = useAppSelector((state) => state.filmsData)
+  useEffect(() => {
+    window.scrollTo(0, 0)
+    disptach(fetchFilms(page))
+  }, [page])
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.tsx</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+     <Header />
+     <Routes>
+      <Route path='/' element={<HomePage /> }/>
+      <Route path='/:id' element={<UniquePage />} />
+     </Routes>
     </div>
   );
 }
